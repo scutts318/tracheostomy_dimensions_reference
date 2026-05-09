@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tracheostomy Tube Dimensions — Reference Guide</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal:#0D6E6E; --teal-dark:#095555; --teal-light:#E0F5F5; --teal-mid:#9DD6D6;
+    --blue:#185FA5; --blue-light:#E6F1FB; --blue-mid:#B5D4F4;
+    --amber-light:#FAEEDA; --amber-mid:#FAC775; --amber:#854F0B;
+    --red-light:#FCEBEB; --red-mid:#F7C1C1; --red:#A32D2D;
+    --green-light:#EAF3DE; --green-mid:#C0DD97; --green:#3B6D11;
+    --gray-100:#F5F4F1; --gray-200:#E8E7E2; --gray-300:#D3D1C7; --gray-500:#888780;
+    --text:#1a1a18; --text-sec:#5c5c58; --text-ter:#888780;
+    --border:#d3d1c7; --border-light:#e8e7e2;
+  }
+  /* Finder */
+  .finder-section{background:#fff;border:1px solid var(--border-light);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;}
+  .goal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-bottom:1.25rem;}
+  .goal-btn{border:1px solid var(--border);border-radius:10px;padding:11px 12px;cursor:pointer;background:#fff;transition:border-color .12s,background .12s;text-align:left;width:100%;}
+  .goal-btn:hover{border-color:var(--teal);background:var(--teal-light);}
+  .goal-btn.sel{border:2px solid var(--teal);background:var(--teal-light);}
+  .goal-btn .gi{font-size:18px;display:block;margin-bottom:5px;}
+  .goal-btn .gt{font-size:12px;font-weight:700;color:var(--text);}
+  .goal-btn .gd{font-size:11px;color:var(--text-sec);margin-top:2px;line-height:1.3;}
+  .finder-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;}
+  .finder-label{font-size:13px;font-weight:600;color:var(--text-sec);min-width:110px;}
+  .finder-select{border:1px solid var(--border);border-radius:8px;padding:7px 11px;font-size:13px;color:var(--text);background:#fff;}
+  .btn-find{background:var(--teal);border:none;border-radius:8px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;color:#fff;margin-top:4px;}
+  .btn-find:hover{background:#0a5555;}
+  .btn-find:disabled{background:var(--gray-300);cursor:not-allowed;}
+  .current-tube-summary{background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:8px;padding:10px 14px;margin-bottom:1rem;}
+  .cts-label{font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+  .cts-dims{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
+  .cts-dim{font-size:12px;color:var(--text-sec);}
+  .cts-dim strong{color:var(--text);font-family:monospace;}
+  .alt-card{background:#fff;border:1px solid var(--border-light);border-radius:12px;padding:1.1rem;margin-bottom:.75rem;}
+  .alt-card.best{border:2px solid var(--teal);}
+  .alt-card.good{border:1px solid var(--green-mid);}
+  .match-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:6px;}
+  .mb-best{background:var(--teal-light);color:var(--teal);border:1px solid var(--teal-mid);}
+  .mb-good{background:var(--green-light);color:var(--green-dark);border:1px solid var(--green-mid);}
+  .mb-possible{background:var(--gray-100);color:var(--gray-700);border:1px solid var(--border);}
+  .alt-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px;}
+  .alt-series{font-size:11px;color:var(--text-sec);margin-bottom:8px;}
+  .dim-compare{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:8px;}
+  .dim-cell{border-radius:7px;padding:7px 9px;border:1px solid;}
+  .dim-better{background:var(--green-light);border-color:var(--green-mid);}
+  .dim-same{background:var(--gray-100);border-color:var(--border);}
+  .dim-worse{background:var(--amber-light);border-color:var(--amber-mid);}
+  .dim-label{font-size:10px;font-weight:600;color:var(--text-sec);text-transform:uppercase;letter-spacing:.04em;}
+  .dim-val{font-size:13px;font-weight:700;color:var(--text);font-family:monospace;margin:2px 0;}
+  .dim-delta{font-size:11px;color:var(--text-sec);}
+  .dim-delta.pos{color:var(--green);}
+  .dim-delta.neg{color:var(--amber);}
+  .alt-note{font-size:12px;color:var(--text-sec);line-height:1.5;padding-top:7px;border-top:1px solid var(--border-light);}
+  .feat-chip{font-size:10px;font-weight:600;padding:2px 6px;border-radius:8px;display:inline-block;margin-right:2px;}
+  .f-cuffed{background:var(--blue-light);color:var(--blue);}
+  .f-uncuffed{background:var(--green-light);color:var(--green);}
+  .f-fen{background:#EDE9FE;color:#3730A3;}
+  .f-sub{background:var(--amber-light);color:var(--amber);}
+  .f-ic{background:var(--gray-100);color:var(--gray-700);}
+  .f-adj{background:var(--teal-light);color:var(--teal);}
+  .f-sil{background:var(--red-light);color:var(--red);}
+  .no-alts{text-align:center;padding:1.5rem;color:var(--text-ter);font-size:13px;}
+    body { background: white; font-size: 11px; }
+    .no-print { display: none !important; }
+    .page-break { page-break-before: always; }
+    .section { page-break-inside: avoid; }
+    h2 { page-break-after: avoid; }
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; font-size: 14px; color: var(--text); background: #f0eeea; line-height: 1.4; }
+
+  /* Header */
+  .site-header { background: var(--teal); color: #fff; padding: 1.5rem 2rem; }
+  .header-inner { max-width: 1100px; margin: 0 auto; }
+  .header-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .header-sub { font-size: 13px; opacity: .8; margin-bottom: 8px; }
+  .header-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .header-tag { font-size: 11px; font-weight: 600; background: rgba(255,255,255,.2); padding: 3px 10px; border-radius: 20px; }
+
+  .page-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* Print button */
+  .print-bar { background: #fff; border: 1px solid var(--border-light); border-radius: 12px; padding: 12px 16px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .print-note { font-size: 13px; color: var(--text-sec); }
+  .btn-print { background: var(--teal); color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .btn-print:hover { background: var(--teal-dark); }
+
+  /* Section */
+  .section { background: #fff; border: 1px solid var(--border-light); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; padding-bottom: 10px; border-bottom: 2px solid var(--teal-light); }
+  .mfr-badge { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+  .mfr-portex { background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue-mid); }
+  .mfr-tracoe { background: var(--teal-light); color: var(--teal-dark); border: 1px solid var(--teal-mid); }
+  .mfr-shiley { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+  .mfr-bivona { background: #F3E8FF; color: #5B21B6; border: 1px solid #C4B5FD; }
+  .section-title { font-size: 17px; font-weight: 700; color: var(--text); }
+  .series-label { font-size: 12px; color: var(--text-sec); font-style: italic; }
+
+  /* Source badge */
+  .source-note { font-size: 11px; color: var(--text-ter); margin-bottom: 10px; font-style: italic; }
+  .source-note strong { color: var(--text-sec); font-style: normal; }
+
+  /* Notes strip */
+  .tube-notes { background: var(--gray-100); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--text-sec); margin-bottom: 10px; line-height: 1.5; }
+  .tube-notes strong { color: var(--text); }
+
+  /* Tables */
+  .tbl-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border-light); margin-bottom: 1.25rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: var(--teal); color: #fff; padding: 9px 12px; text-align: left; font-weight: 600; font-size: 12px; white-space: nowrap; }
+  thead th.num { text-align: center; }
+  tbody tr { border-bottom: 1px solid var(--border-light); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--teal-light); }
+  tbody td { padding: 8px 12px; vertical-align: middle; }
+  td.size { font-weight: 700; color: var(--teal); font-size: 15px; }
+  td.num { text-align: center; font-family: monospace; font-size: 13px; }
+  td.bold { font-weight: 600; }
+  td.note-td { font-size: 11px; color: var(--text-sec); }
+  .shiley-note { font-size: 11px; color: var(--amber); font-style: italic; }
+
+  /* Warning box */
+  .warn-box { background: var(--amber-light); border: 1px solid var(--amber-mid); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--amber); margin-bottom: 10px; line-height: 1.5; }
+  .warn-box strong { color: #633806; }
+  .info-box { background: var(--blue-light); border: 1px solid var(--blue-mid); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--blue); margin-bottom: 10px; line-height: 1.5; }
+  .info-box strong { color: #0C447C; }
+
+  /* Key */
+  .key-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-top: 10px; }
+  .key-item { background: var(--gray-100); border-radius: 8px; padding: 8px 12px; font-size: 12px; }
+  .key-abbr { font-weight: 700; color: var(--teal); font-family: monospace; }
+  .key-def { color: var(--text-sec); }
+
+  /* Cross-compare section */
+  .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+  .compare-card { background: var(--gray-100); border-radius: 10px; padding: 12px; }
+  .compare-card-title { font-size: 13px; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
+  .compare-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border-light); font-size: 12px; }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-mfr { font-weight: 600; }
+  .compare-val { font-family: monospace; color: var(--text); }
+
+  /* Footer */
+  .doc-footer { text-align: center; padding: 2rem; font-size: 11px; color: var(--text-ter); line-height: 1.7; border-top: 1px solid var(--border-light); margin-top: 2rem; }
+  .doc-footer strong { color: var(--text-sec); }
+
+  h2 { font-size: 15px; font-weight: 700; color: var(--text); margin: 1rem 0 6px; }
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <div class="header-inner">
+    <div class="header-title">Tracheostomy Tube Dimensions — Reference Guide</div>
+    <div class="header-sub">Sleep &amp; Ventilation Department · Royal Brompton Hospital (GSTT)</div>
+    <div class="header-meta">
+      <span class="header-tag">Clinical Reference</span>
+      <span class="header-tag">Data sourced from manufacturer IFUs &amp; official technical data sheets</span>
+      <span class="header-tag">Compiled April 2026</span>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <div class="print-bar no-print">
+    <span class="print-note">Print-optimised layout — use your browser's print function or click below</span>
+    <button class="btn-print" onclick="window.print()">🖨 Print / Save as PDF</button>
+  </div>
+
+  <!-- KEY -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Key — Abbreviations Used</div>
+    </div>
+    <div class="info-box"><strong>Sizing note:</strong> Portex, Tracoe, Shiley Flexible, and Bivona tubes all use ISO sizing — the tube size number equals the inner diameter of the inner cannula in mm (e.g. size 8 = 8.0 mm ID-IC). Shiley Standard/DCT series uses older Jackson sizing and is <em>not</em> ISO — size 8 = 7.6 mm ID. Always check which series is in use.</div>
+    <div class="key-grid">
+      <div class="key-item"><span class="key-abbr">ID-IC</span> <span class="key-def">Inner diameter at bottom of inner cannula (mm) — the effective airway lumen</span></div>
+      <div class="key-item"><span class="key-abbr">OD-OC</span> <span class="key-def">Outer diameter of outer cannula (mm) — determines tracheal fit</span></div>
+      <div class="key-item"><span class="key-abbr">TL</span> <span class="key-def">Tube length along centre line from flange to tip (mm)</span></div>
+      <div class="key-item"><span class="key-abbr">OB</span> <span class="key-def">Length along outer bend from flange to tip (mm)</span></div>
+      <div class="key-item"><span class="key-abbr">BA</span> <span class="key-def">Bending angle in degrees (°) — angle of the tube curve</span></div>
+      <div class="key-item"><span class="key-abbr">CD</span> <span class="key-def">Cuff inflated diameter (mm)</span></div>
+      <div class="key-item"><span class="key-abbr">IC</span> <span class="key-def">Inner cannula — inner tube that can be removed for cleaning/replacement</span></div>
+      <div class="key-item"><span class="key-abbr">SSH / Suctionaid</span> <span class="key-def">Subglottic suction port — allows drainage of secretions above the cuff</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ PORTEX ═══════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="mfr-badge mfr-portex">Portex (ICU Medical)</span>
+      <div>
+        <div class="section-title">Blue Line Ultra (BLU) &amp; BLUselect</div>
+        <div class="series-label">Thermosensitive PVC · Low-pressure Soft-Seal cuff · Inner cannula included</div>
+      </div>
+    </div>
+    <div class="source-note"><strong>Source:</strong> Tracheostomy Sizing Chart, tracheostomyteam.org (updated 27/05/2024); ICU Medical product specifications. BLUselect is the current range — dimensions equivalent to BLU.</div>
+    <div class="tube-notes"><strong>Clinical notes:</strong> BLUselect is the current catalogue name for the Blue Line Ultra range. Colour-coded by size for rapid identification. Suctionaid / SSH variant has a separate subglottic suction lumen — OD is slightly larger than standard cuffed at the same size (not broken out in this table; see SSH row). Includes obturator, two inner cannulae, tube holder, and cleaning brush.</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th class="num">ID (outer cannula) mm</th>
+            <th class="num">ID with IC mm</th>
+            <th class="num">OD mm</th>
+            <th class="num">Length (TL) mm</th>
+            <th class="num">Cuff OD mm</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="size">6</td><td class="num">6.0</td><td class="num">5.0</td><td class="num bold">9.2</td><td class="num bold">64.5</td><td class="num">20.0</td><td class="note-td">Smallest adult size</td></tr>
+          <tr><td class="size">7</td><td class="num">7.0</td><td class="num">5.5</td><td class="num bold">10.5</td><td class="num bold">70.0</td><td class="num">24.0</td><td class="note-td">Most common starting size (female)</td></tr>
+          <tr><td class="size">7.5</td><td class="num">7.5</td><td class="num">6.0</td><td class="num bold">11.3</td><td class="num bold">73.0</td><td class="num">30.0</td><td class="note-td"></td></tr>
+          <tr><td class="size">8</td><td class="num">8.0</td><td class="num">6.5</td><td class="num bold">11.9</td><td class="num bold">75.5</td><td class="num">30.0</td><td class="note-td">Most common starting size (male)</td></tr>
+          <tr><td class="size">8.5</td><td class="num">8.5</td><td class="num">7.0</td><td class="num bold">12.6</td><td class="num bold">78.0</td><td class="num">30.0</td><td class="note-td"></td></tr>
+          <tr><td class="size">9</td><td class="num">9.0</td><td class="num">7.5</td><td class="num bold">13.3</td><td class="num bold">81.0</td><td class="num">30.0</td><td class="note-td"></td></tr>
+          <tr><td class="size">10</td><td class="num">10.0</td><td class="num">8.5</td><td class="num bold">14.0</td><td class="num bold">87.5</td><td class="num">30.0</td><td class="note-td">Largest standard size</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Portex Adjustable Flange (Blue Line)</h2>
+    <div class="tube-notes"><strong>Adjustable flange:</strong> Flange slides along the shaft and can be repositioned to accommodate non-standard neck depth. Length shown as range (min–max). No inner cannula variant — outer cannula only.</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Size</th><th class="num">ID mm</th><th class="num">OD mm</th><th class="num">Length range (mm)</th><th class="num">Cuff OD mm</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="size">6</td><td class="num">6.0</td><td class="num bold">8.3</td><td class="num bold">59–81</td><td class="num">20.0</td></tr>
+          <tr><td class="size">7</td><td class="num">7.0</td><td class="num bold">9.7</td><td class="num bold">64–84</td><td class="num">24.0</td></tr>
+          <tr><td class="size">8</td><td class="num">8.0</td><td class="num bold">11.0</td><td class="num bold">73–97</td><td class="num">30.0</td></tr>
+          <tr><td class="size">9</td><td class="num">9.0</td><td class="num bold">12.4</td><td class="num bold">78–111</td><td class="num">30.0</td></tr>
+          <tr><td class="size">10</td><td class="num">10.0</td><td class="num bold">13.7</td><td class="num bold">84–123</td><td class="num">30.0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Portex UniPerc Adjustable Flange</h2>
+    <div class="tube-notes">Adjustable flange percutaneous tube. The outer cannula ID (without IC) is larger than the labelled size; the IC reduces effective lumen to the labelled size.</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Size</th><th class="num">ID (outer, no IC) mm</th><th class="num">ID with IC mm</th><th class="num">OD mm</th><th class="num">Length range (mm)</th><th class="num">Cuff OD mm</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="size">7</td><td class="num">9.3</td><td class="num">7.0</td><td class="num bold">11.6</td><td class="num bold">70–115</td><td class="num">24</td></tr>
+          <tr><td class="size">8</td><td class="num">10.3</td><td class="num">8.0</td><td class="num bold">12.6</td><td class="num bold">80–126</td><td class="num">30</td></tr>
+          <tr><td class="size">9</td><td class="num">11.3</td><td class="num">9.0</td><td class="num bold">13.6</td><td class="num bold">85–135</td><td class="num">30</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ TRACOE TWIST ═══════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="mfr-badge mfr-tracoe">Tracoe (Atos Medical)</span>
+      <div>
+        <div class="section-title">Tracoe Twist</div>
+        <div class="series-label">Polyurethane (PU) outer cannula · Double-swivel neck flange · Low-pressure PVC cuff</div>
+      </div>
+    </div>
+    <div class="source-note"><strong>Source:</strong> Official Atos Medical / Tracoe Medical technical data sheet MC3043-TcEN 202306 — directly from atosmedical.com. All measurements verified.</div>
+    <div class="tube-notes"><strong>Clinical notes:</strong> Sizing corresponds to the ID of the inner cannula (ID-IC), not the outer cannula lumen. The double-swivel neck flange rotates on two axes. Thinner tube walls than PVC give a better ID/OD ratio. Not suitable for SSH (subglottic suction) — the thin wall cannot accommodate an embedded suction lumen; use Twist Extract for SSH. Maximum useful life: 29 days from first use.</div>
+    <div class="warn-box"><strong>Angle note:</strong> The bending angle (BA) decreases with size — smaller tubes have a tighter curve (110° at size 4) and larger tubes are more open (90° at size 8–10). This reflects anatomical variation and affects tube selection for non-standard anatomy.</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th class="num">ID-IC mm</th>
+            <th class="num">OD at tip (bc) mm</th>
+            <th class="num">OD behind flange (bf) mm</th>
+            <th class="num">Length (TL) mm</th>
+            <th class="num">Length (OB) mm</th>
+            <th class="num">Bend angle (°)</th>
+            <th class="num">Cuff diam (mm)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="size">04</td><td class="num">4.0</td><td class="num bold">7.2</td><td class="num">8.6</td><td class="num bold">59</td><td class="num">63.0</td><td class="num bold">110°</td><td class="num">15</td></tr>
+          <tr><td class="size">05</td><td class="num">5.0</td><td class="num bold">8.6</td><td class="num">10.1</td><td class="num bold">66</td><td class="num">73.0</td><td class="num bold">100°</td><td class="num">18</td></tr>
+          <tr><td class="size">06</td><td class="num">6.0</td><td class="num bold">9.2</td><td class="num">10.8</td><td class="num bold">72</td><td class="num">79.5</td><td class="num bold">95°</td><td class="num">23</td></tr>
+          <tr><td class="size">07</td><td class="num">7.0</td><td class="num bold">10.4</td><td class="num">12.0</td><td class="num bold">74</td><td class="num">80.5</td><td class="num bold">95°</td><td class="num">26</td></tr>
+          <tr><td class="size">08</td><td class="num">8.0</td><td class="num bold">11.4</td><td class="num">12.7</td><td class="num bold">76</td><td class="num">83.0</td><td class="num bold">90°</td><td class="num">28</td></tr>
+          <tr><td class="size">09</td><td class="num">9.0</td><td class="num bold">12.5</td><td class="num">14.2</td><td class="num bold">78</td><td class="num">88.5</td><td class="num bold">90°</td><td class="num">30</td></tr>
+          <tr><td class="size">10</td><td class="num">10.0</td><td class="num bold">13.8</td><td class="num">15.2</td><td class="num bold">80</td><td class="num">89.5</td><td class="num bold">90°</td><td class="num">32</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ TRACOE TWIST PLUS ═══════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="mfr-badge mfr-tracoe">Tracoe (Atos Medical)</span>
+      <div>
+        <div class="section-title">Tracoe Twist Plus (REF 312 — Cuffed Fenestrated)</div>
+        <div class="series-label">Polyurethane · Double fenestration (inner + outer bend) · Double-swivel flange · Low-pressure PVC cuff</div>
+      </div>
+    </div>
+    <div class="source-note"><strong>Source:</strong> Official Atos Medical Product Datasheet REF 312, © 2023/04 Coloplast A/S — directly from atosmedical.com. All measurements verified.</div>
+    <div class="tube-notes"><strong>Clinical notes:</strong> Twist Plus has a larger OD than Twist at the same size — the fenestrated design requires additional wall material. All sizes have a 100° bend angle (more open curve than Twist at smaller sizes). Comes with both fenestrated and non-fenestrated inner cannulae. For ventilation: always use non-fenestrated IC. For phonation/valve: use fenestrated IC with cuff deflated. SSH (subglottic suction) version is available as the Twist Plus Extract series. Available sizes 07–10 in this variant.</div>
+    <div class="warn-box"><strong>Twist vs Twist Plus — OD difference:</strong> The Twist Plus has a consistently <em>smaller</em> OD than the standard Twist at the same ISO size — e.g. size 08: Twist OD = 11.4 mm vs Twist Plus OD = 10.8 mm. This is because the Twist Plus uses thinner polyurethane walls. A smaller OD means less tracheal wall pressure at the same inner diameter, which may be advantageous for long-term patients. Note however that the Twist Plus is also longer (TL) than the Twist at the same size, so verify anatomical fit.</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th class="num">ID-IC mm</th>
+            <th class="num">OD at tip (bc) mm</th>
+            <th class="num">OD behind flange (bf) mm</th>
+            <th class="num">Length (TL) mm</th>
+            <th class="num">Length (OB) mm</th>
+            <th class="num">Bend angle (°)</th>
+            <th class="num">Cuff diam (mm)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="size">07</td><td class="num">7.0</td><td class="num bold">9.8</td><td class="num">10.1</td><td class="num bold">85</td><td class="num">91</td><td class="num bold">100°</td><td class="num">26</td></tr>
+          <tr><td class="size">08</td><td class="num">8.0</td><td class="num bold">10.8</td><td class="num">11.1</td><td class="num bold">88</td><td class="num">95</td><td class="num bold">100°</td><td class="num">28</td></tr>
+          <tr><td class="size">09</td><td class="num">9.0</td><td class="num bold">11.8</td><td class="num">12.1</td><td class="num bold">90</td><td class="num">99</td><td class="num bold">100°</td><td class="num">30</td></tr>
+          <tr><td class="size">10</td><td class="num">10.0</td><td class="num bold">12.8</td><td class="num">13.1</td><td class="num bold">92</td><td class="num">102</td><td class="num bold">100°</td><td class="num">32</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ SHILEY FLEXIBLE ═══════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="mfr-badge mfr-shiley">Shiley (Medtronic)</span>
+      <div>
+        <div class="section-title">Shiley Flexible — CN / UN Series (TaperGuard™ Cuff)</div>
+        <div class="series-label">PVC · TaperGuard cuff · ISO sizing · Disposable inner cannula · Current generation</div>
+      </div>
+    </div>
+    <div class="source-note"><strong>Source:</strong> Tracheostomy Sizing Chart, tracheostomyteam.org (updated 27/05/2024); United Medical Supply product specifications (individual size data confirmed); Medtronic product catalogue. These are the current generation Shiley Flexible tubes — formerly called CFS/CFN.</div>
+    <div class="tube-notes"><strong>Clinical notes:</strong> ISO sizing — size number = inner cannula ID in mm. TaperGuard cuff provides improved seal and reduced aspiration risk. Flexible PVC softens at body temperature. The CN series is cuffed; UN is uncuffed (cuffless). Larger inner diameter compared to older Shiley Standard series (DCT/DCFS) at equivalent Jackson size. Disposable inner cannulas included.</div>
+    <div class="warn-box"><strong>Shiley Jackson vs ISO sizing:</strong> The older Shiley Standard (DCT/DFEN/DCFS/DCFN) series uses Jackson sizing — size 8 = 7.6 mm ID, NOT 8.0 mm. The current Flexible (CN/UN) series uses ISO sizing. Always check which series is in situ before ordering a replacement.</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Shiley size</th>
+            <th class="num">ID (outer cannula, no IC) mm</th>
+            <th class="num">ID with IC mm</th>
+            <th class="num">OD mm</th>
+            <th class="num">Length mm</th>
+            <th>Series</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="size">4</td><td class="num">6.5</td><td class="num">5.5</td><td class="num bold">9.4</td><td class="num bold">62</td><td class="note-td">CN/UN Flexible</td></tr>
+          <tr><td class="size">5</td><td class="num">7.0</td><td class="num">6.0</td><td class="num bold">10.1</td><td class="num bold">68</td><td class="note-td">CN/UN Flexible</td></tr>
+          <tr><td class="size">6</td><td class="num">7.5</td><td class="num">6.5</td><td class="num bold">10.8</td><td class="num bold">74</td><td class="note-td">CN/UN Flexible</td></tr>
+          <tr><td class="size">7</td><td class="num">8.0</td><td class="num">7.0</td><td class="num bold">11.4</td><td class="num bold">77</td><td class="note-td">CN/UN Flexible — confirmed 8.0 mm ID × 11.4 mm OD × 77 mm</td></tr>
+          <tr><td class="size">8</td><td class="num">8.5</td><td class="num">7.5</td><td class="num bold">12.2</td><td class="num bold">79</td><td class="note-td">CN/UN Flexible — confirmed 8.5 mm ID × 12.2 mm OD × 79 mm</td></tr>
+          <tr><td class="size">9</td><td class="num">9.0</td><td class="num">8.0</td><td class="num bold">12.7</td><td class="num bold">79</td><td class="note-td">CN/UN Flexible</td></tr>
+          <tr><td class="size">10</td><td class="num">10.0</td><td class="num">9.0</td><td class="num bold">13.8</td><td class="num bold">79</td><td class="note-td">CN/UN Flexible</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Shiley Standard (DCT/DFEN/DCFS/DCFN) — Jackson sizing</h2>
+    <div class="warn-box"><strong>Jackson sizing — not ISO.</strong> Size number does NOT equal ID in mm. This older series is included for reference only — if a patient has one of these tubes in situ, use the table below to identify the actual dimensions before ordering a replacement.</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Jackson size</th><th class="num">ID mm</th><th class="num">OD mm</th><th class="num">Length mm</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="size">4</td><td class="num bold">5.0</td><td class="num bold">9.4</td><td class="num bold">62</td><td class="note-td shiley-note">ID 5.0 mm — significantly smaller than ISO size 4 (6.5 mm)</td></tr>
+          <tr><td class="size">6</td><td class="num bold">6.4</td><td class="num bold">10.8</td><td class="num bold">74</td><td class="note-td shiley-note">ID 6.4 mm — smaller than ISO size 6 (7.5 mm)</td></tr>
+          <tr><td class="size">8</td><td class="num bold">7.6</td><td class="num bold">12.2</td><td class="num bold">79</td><td class="note-td shiley-note">ID 7.6 mm — smaller than ISO size 8 (8.5 mm)</td></tr>
+          <tr><td class="size">10</td><td class="num bold">8.9</td><td class="num bold">13.8</td><td class="num bold">79</td><td class="note-td shiley-note">ID 8.9 mm — smaller than ISO size 10 (10.0 mm)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ BIVONA ═══════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="mfr-badge mfr-bivona">Bivona (ICU Medical)</span>
+      <div>
+        <div class="section-title">Bivona TTS, Cuffless &amp; HyperFlex Adjustable Flange</div>
+        <div class="series-label">Silicone · Tight-to-shaft (TTS) or Aire-Cuf · Water-fill cuff (TTS) · Inner cannula available</div>
+      </div>
+    </div>
+    <div class="source-note"><strong>Source:</strong> Tracheostomy Sizing Chart, tracheostomyteam.org (updated 27/05/2024). Note: Bivona dimensions are less commonly tabulated — verify against manufacturer IFU before clinical use.</div>
+    <div class="tube-notes"><strong>Clinical notes:</strong> Bivona tubes are silicone — important for patients with PVC intolerance or long-term skin sensitivity. TTS (tight-to-shaft) cuff collapses completely when deflated and can be inflated to fill a larger-than-normal trachea — particularly useful for tracheomalacia or enlarged trachea. Inner cannulas are available for TTS and Aire-Cuf series. <strong>Water-filled TTS cuff should only be used in ICU/HDU</strong> where tracheal pressure can be carefully monitored. Aire-Cuf uses air and is suitable for community use.</div>
+    <div class="warn-box"><strong>TTS water-fill cuff:</strong> Only use in ICU/HDU. The water-fill cuff has different compliance characteristics to standard air-fill — do not assume standard cuff pressure management applies.</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Size</th><th class="num">ID mm</th><th class="num">OD mm</th><th class="num">Length mm</th><th class="num">Cuff OD mm</th><th>Variant</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="size">6</td><td class="num">6.0</td><td class="num bold">8.8</td><td class="num bold">70</td><td class="num">11.0</td><td class="note-td">TTS / Cuffless</td></tr>
+          <tr><td class="size">7</td><td class="num">7.0</td><td class="num bold">10.0</td><td class="num bold">80</td><td class="num">12.0</td><td class="note-td">TTS / Cuffless</td></tr>
+          <tr><td class="size">7.5</td><td class="num">7.5</td><td class="num bold">10.5</td><td class="num bold">80</td><td class="num">12.0</td><td class="note-td">TTS / Cuffless</td></tr>
+          <tr><td class="size">8</td><td class="num">8.0</td><td class="num bold">11.0</td><td class="num bold">88</td><td class="num">13.0</td><td class="note-td">TTS / Cuffless</td></tr>
+          <tr><td class="size">8.5</td><td class="num">8.5</td><td class="num bold">11.8</td><td class="num bold">88</td><td class="num">13.0</td><td class="note-td">TTS / Cuffless</td></tr>
+          <tr><td class="size">9</td><td class="num">9.0</td><td class="num bold">12.3</td><td class="num bold">98</td><td class="num">—</td><td class="note-td">Cuffless only at size 9</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Bivona Aire-Cuf (air-fill, community-appropriate)</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Size</th><th class="num">ID mm</th><th class="num">OD mm</th><th class="num">Length mm</th><th class="num">Cuff OD mm</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="size">6</td><td class="num">6.0</td><td class="num bold">8.8</td><td class="num bold">70</td><td class="num">—</td></tr>
+          <tr><td class="size">7</td><td class="num">7.0</td><td class="num bold">10.0</td><td class="num bold">80</td><td class="num">21.0</td></tr>
+          <tr><td class="size">8</td><td class="num">8.0</td><td class="num bold">11.0</td><td class="num bold">88</td><td class="num">25.0</td></tr>
+          <tr><td class="size">9</td><td class="num">9.0</td><td class="num bold">12.3</td><td class="num bold">98</td><td class="num">28.0</td></tr>
+          <tr><td class="size">9.5</td><td class="num">9.5</td><td class="num bold">13.3</td><td class="num bold">98</td><td class="num">30.0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Bivona HyperFlex Adjustable Flange</h2>
+    <div class="tube-notes">Silicone adjustable flange for difficult anatomy. Maximum length shown — flange can be positioned to achieve shorter functional length.</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Size</th><th class="num">ID mm</th><th class="num">OD mm</th><th class="num">Max length mm</th><th class="num">Cuff OD mm</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="size">6</td><td class="num">6.0</td><td class="num bold">9.2</td><td class="num bold">110</td><td class="num">11</td></tr>
+          <tr><td class="size">7</td><td class="num">7.0</td><td class="num bold">10.6</td><td class="num bold">120</td><td class="num">12</td></tr>
+          <tr><td class="size">8</td><td class="num">8.0</td><td class="num bold">11.7</td><td class="num bold">130</td><td class="num">13</td></tr>
+          <tr><td class="size">9</td><td class="num">9.0</td><td class="num bold">12.9</td><td class="num bold">140</td><td class="num">14.5</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ CROSS-COMPARISON ═══════════════════════ -->
+  <div class="section page-break">
+    <div class="section-header">
+      <div class="section-title">📐 Cross-Brand Comparison at Common ISO Sizes</div>
+    </div>
+    <div class="info-box"><strong>How to use this table:</strong> Find the ISO size (= inner cannula ID in mm) your patient needs. Scan across brands to compare OD and length — relevant when switching brand or when anatomy dictates a specific OD. Note: Shiley uses a different numbering system — its size 7 = ISO 8.0 mm ID.</div>
+
+    <h2>ISO Size 7.0 mm ID — cross-brand comparison</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Brand / Series</th><th class="num">ID-IC mm</th><th class="num">OD mm</th><th class="num">Length (TL) mm</th><th class="num">Bend angle</th><th>Material</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="bold">Portex BLU / BLUselect</td><td class="num">7.0 (IC: 5.5)</td><td class="num bold">10.5</td><td class="num bold">70.0</td><td class="num">~90°</td><td>PVC</td><td class="note-td">Standard cuffed / uncuffed / SSH</td></tr>
+          <tr><td class="bold">Tracoe Twist</td><td class="num">7.0</td><td class="num bold">10.4</td><td class="num bold">74</td><td class="num">95°</td><td>PU</td><td class="note-td">Cuffed / uncuffed; swivel flange</td></tr>
+          <tr><td class="bold">Tracoe Twist Plus</td><td class="num">7.0</td><td class="num bold">9.8</td><td class="num bold">85</td><td class="num">100°</td><td>PU</td><td class="note-td">Fenestrated; longer TL; more open curve</td></tr>
+          <tr><td class="bold">Bivona TTS</td><td class="num">7.0</td><td class="num bold">10.0</td><td class="num bold">80</td><td class="num">~90°</td><td>Silicone</td><td class="note-td">No IC; water-fill cuff; ICU/HDU only</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>ISO Size 8.0 mm ID — cross-brand comparison</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Brand / Series</th><th class="num">ID-IC mm</th><th class="num">OD mm</th><th class="num">Length (TL) mm</th><th class="num">Bend angle</th><th>Material</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="bold">Portex BLU / BLUselect</td><td class="num">8.0 (IC: 6.5)</td><td class="num bold">11.9</td><td class="num bold">75.5</td><td class="num">~90°</td><td>PVC</td><td class="note-td">Standard cuffed / uncuffed / SSH</td></tr>
+          <tr><td class="bold">Tracoe Twist</td><td class="num">8.0</td><td class="num bold">11.4</td><td class="num bold">76</td><td class="num">90°</td><td>PU</td><td class="note-td">Cuffed / uncuffed; swivel flange</td></tr>
+          <tr><td class="bold">Tracoe Twist Plus</td><td class="num">8.0</td><td class="num bold">10.8</td><td class="num bold">88</td><td class="num">100°</td><td>PU</td><td class="note-td">Fenestrated; longer TL</td></tr>
+          <tr><td class="bold">Shiley Flexible (size 7)</td><td class="num">8.0 (IC: 7.0)</td><td class="num bold">11.4</td><td class="num bold">77</td><td class="num">~87°</td><td>PVC</td><td class="note-td">⚠ Shiley size 7 = ISO 8.0 mm</td></tr>
+          <tr><td class="bold">Bivona TTS</td><td class="num">8.0</td><td class="num bold">11.0</td><td class="num bold">88</td><td class="num">~90°</td><td>Silicone</td><td class="note-td">No IC; water-fill cuff; ICU/HDU only</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>ISO Size 9.0 mm ID — cross-brand comparison</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Brand / Series</th><th class="num">ID-IC mm</th><th class="num">OD mm</th><th class="num">Length (TL) mm</th><th class="num">Bend angle</th><th>Material</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="bold">Portex BLU / BLUselect</td><td class="num">9.0 (IC: 7.5)</td><td class="num bold">13.3</td><td class="num bold">81.0</td><td class="num">~90°</td><td>PVC</td><td class="note-td"></td></tr>
+          <tr><td class="bold">Tracoe Twist</td><td class="num">9.0</td><td class="num bold">12.5</td><td class="num bold">78</td><td class="num">90°</td><td>PU</td><td class="note-td">Smaller OD than Portex at same ID</td></tr>
+          <tr><td class="bold">Tracoe Twist Plus</td><td class="num">9.0</td><td class="num bold">11.8</td><td class="num bold">90</td><td class="num">100°</td><td>PU</td><td class="note-td">Fenestrated; largest OD difference from Portex</td></tr>
+          <tr><td class="bold">Shiley Flexible (size 9)</td><td class="num">9.0 (IC: 8.0)</td><td class="num bold">12.7</td><td class="num bold">79</td><td class="num">~87°</td><td>PVC</td><td class="note-td">Shiley size 9 = ISO 9.0 mm</td></tr>
+          <tr><td class="bold">Bivona TTS</td><td class="num">9.0</td><td class="num bold">12.3</td><td class="num bold">98</td><td class="num">~90°</td><td>Silicone</td><td class="note-td">Cuffless only at size 9</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DATA QUALITY NOTE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">⚠ Data Quality &amp; Validation Status</div>
+    </div>
+    <div class="warn-box" style="margin-bottom:10px;"><strong>This document should be verified against current manufacturer IFUs before clinical use.</strong> Dimensions may vary between tube variants within the same series (e.g. SSH vs standard cuffed), and manufacturers may update specifications. The data below has been sourced from official publications as noted.</div>
+    <div class="key-grid">
+      <div class="key-item" style="background:var(--green-light);border:1px solid var(--green-mid);">
+        <div style="font-weight:700;color:var(--green);margin-bottom:4px;">✓ Verified — high confidence</div>
+        <div style="font-size:12px;color:var(--text-sec);">Portex BLU / BLUselect — tracheostomyteam.org chart (May 2024)<br>Tracoe Twist — official Atos Medical technical data sheet (June 2023)<br>Tracoe Twist Plus REF 312 — official Atos Medical product datasheet (April 2023)<br>Shiley Flexible CN/UN — tracheostomyteam.org + confirmed individual size specs</div>
+      </div>
+      <div class="key-item" style="background:var(--amber-light);border:1px solid var(--amber-mid);">
+        <div style="font-weight:700;color:var(--amber);margin-bottom:4px;">⚠ Verify before use</div>
+        <div style="font-size:12px;color:var(--text-sec);">Bivona — sourced from tracheostomyteam.org chart; verify against ICU Medical IFU, especially for TTS water-fill cuff dimensions<br>Portex Adjustable Flange &amp; UniPerc — from same chart; verify length ranges against current ICU Medical catalogue<br>Shiley Standard (DCT series) — historical data; confirm if still stocked locally</div>
+      </div>
+      <div class="key-item" style="background:var(--red-light);border:1px solid var(--red-mid);">
+        <div style="font-weight:700;color:var(--red);margin-bottom:4px;">✗ Not yet included</div>
+        <div style="font-size:12px;color:var(--text-sec);">Kapitex TracheoSoft / Tracoe Vario — dimensions not verified from primary source<br>Atos Provox TracheoTube — dimensions not verified<br>Tracoe Comfort / Extra Long — dimensions pending</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+  <!-- ═══════════════════════ ALTERNATIVE FINDER ═══════════════════════ -->
+  <div class="section finder-section no-print">
+    <div class="section-header">
+      <div class="section-title">🔍 Find an Alternative Tube</div>
+    </div>
+    <p style="font-size:13px;color:var(--text-sec);margin-bottom:1.25rem;line-height:1.5;">Select the tube currently in situ and what you're trying to achieve. Alternatives are ranked by how well they match your goal, with a side-by-side dimension comparison.</p>
+
+    <div class="finder-row">
+      <span class="finder-label">Manufacturer:</span>
+      <select class="finder-select" id="r-mfr" onchange="rUpdateTubeSelect()">
+        <option value="">-- Select manufacturer --</option>
+        <option>Portex</option><option>Tracoe</option><option>Shiley</option><option>Kapitex</option><option>Atos</option><option>Bivona</option>
+      </select>
+    </div>
+    <div class="finder-row">
+      <span class="finder-label">Current tube:</span>
+      <select class="finder-select" id="r-tube" onchange="rUpdateDims()">
+        <option value="">-- Select tube --</option>
+      </select>
+    </div>
+    <div id="r-dims-box" style="display:none;" class="current-tube-summary">
+      <div class="cts-label">Current tube dimensions</div>
+      <div class="cts-dims" id="r-dims-content"></div>
+    </div>
+
+    <div style="margin:1rem 0 .6rem;font-size:13px;font-weight:700;color:var(--text);">What are you trying to achieve?</div>
+    <div class="goal-grid" id="r-goals">
+      <button class="goal-btn" data-goal="smaller_od" onclick="rSelGoal(this)"><span class="gi">🔽</span><div class="gt">Smaller outer diameter</div><div class="gd">Reduce tracheal wall pressure</div></button>
+      <button class="goal-btn" data-goal="larger_id" onclick="rSelGoal(this)"><span class="gi">🔼</span><div class="gt">Larger airway lumen</div><div class="gd">Improve airflow / secretion clearance</div></button>
+      <button class="goal-btn" data-goal="same_od_diff_brand" onclick="rSelGoal(this)"><span class="gi">🔄</span><div class="gt">Same dims, different brand</div><div class="gd">Stock, preference, or tolerance</div></button>
+      <button class="goal-btn" data-goal="add_ssh" onclick="rSelGoal(this)"><span class="gi">💧</span><div class="gt">Add subglottic suction</div><div class="gd">Upgrade to SSH port</div></button>
+      <button class="goal-btn" data-goal="add_fen" onclick="rSelGoal(this)"><span class="gi">🗣</span><div class="gt">Add fenestration</div><div class="gd">Enable phonation / speaking valve</div></button>
+      <button class="goal-btn" data-goal="add_adj" onclick="rSelGoal(this)"><span class="gi">📐</span><div class="gt">Add adjustable flange</div><div class="gd">Non-standard neck depth</div></button>
+      <button class="goal-btn" data-goal="silicone" onclick="rSelGoal(this)"><span class="gi">🧬</span><div class="gt">Switch to silicone</div><div class="gd">PVC intolerance / long-term comfort</div></button>
+      <button class="goal-btn" data-goal="downsize" onclick="rSelGoal(this)"><span class="gi">📉</span><div class="gt">Downsize</div><div class="gd">One ISO size smaller — weaning</div></button>
+      <button class="goal-btn" data-goal="uncuff" onclick="rSelGoal(this)"><span class="gi">🌬</span><div class="gt">Go uncuffed</div><div class="gd">Same size without cuff</div></button>
+      <button class="goal-btn" data-goal="shorter" onclick="rSelGoal(this)"><span class="gi">📏</span><div class="gt">Shorter tube</div><div class="gd">Reduce tube length</div></button>
+    </div>
+
+    <button class="btn-find" id="r-btn-find" disabled onclick="rRunFinder()">Find alternatives →</button>
+    <div id="r-finder-results" style="margin-top:1rem;"></div>
+  </div>
+
+<div class="doc-footer">
+  <strong>Clinical reference only.</strong> All dimensions are manufacturer-stated and subject to change. Verify against current manufacturer IFU before clinical use.<br>
+  Dimensions may vary between tube variants (e.g. SSH vs standard, fenestrated vs non-fenestrated) within the same series — consult full product catalogue for variant-specific data.<br>
+  Final tube selection requires clinical assessment and patient-specific evaluation. Follow current NTSP / ICS tracheostomy care standards.<br>
+  Compiled by Sleep &amp; Ventilation, Royal Brompton Hospital (GSTT) · April 2026
+  <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-light);font-size:11px;color:var(--text-ter);">© 2025 Steve Cutts, Royal Brompton Hospital, Guy's &amp; St Thomas' NHS Foundation Trust. All rights reserved.<br>This tool and its clinical decision logic are the intellectual property of the author. Reproduction, redistribution, or adaptation without written permission is prohibited.</div>
+</div>
+
+<script>
+/* ── Shared tube database (sourced from manufacturer IFUs — see data quality section) ── */
+const RTUBES = [
+  // PORTEX — verified from tracheostomyteam.org May 2024
+  { mfr:"Portex", name:"Blue Line Ultra Cuffed", id:6.0, od:9.2, len_std:64.5, angle:"~90°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Portex", name:"Blue Line Ultra Cuffed", id:7.0, od:10.5, len_std:70.0, angle:"~90°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Portex", name:"Blue Line Ultra Cuffed", id:7.5, od:11.3, len_std:73.0, angle:"~90°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Portex", name:"Blue Line Ultra Cuffed", id:8.0, od:11.9, len_std:75.5, angle:"~90°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Portex", name:"Blue Line Ultra Cuffed", id:8.5, od:12.6, len_std:78.0, angle:"~90°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Portex", name:"Blue Line Ultra Cuffed", id:9.0, od:13.3, len_std:81.0, angle:"~90°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Portex", name:"Blue Line Ultra Cuffed", id:10.0, od:14.0, len_std:87.5, angle:"~90°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Portex", name:"Blue Line Ultra Uncuffed", id:6.0, od:9.2, len_std:64.5, angle:"~90°", feats:["uncuffed","inner_cannula"] },
+  { mfr:"Portex", name:"Blue Line Ultra Uncuffed", id:7.0, od:10.5, len_std:70.0, angle:"~90°", feats:["uncuffed","inner_cannula"] },
+  { mfr:"Portex", name:"Blue Line Ultra Uncuffed", id:8.0, od:11.9, len_std:75.5, angle:"~90°", feats:["uncuffed","inner_cannula"] },
+  { mfr:"Portex", name:"Adj. Flange (Blue Line)", id:6.0, od:8.3, len_std:70, angle:"~90°", feats:["cuffed","adjustable"] },
+  { mfr:"Portex", name:"Adj. Flange (Blue Line)", id:7.0, od:9.7, len_std:74, angle:"~90°", feats:["cuffed","adjustable"] },
+  { mfr:"Portex", name:"Adj. Flange (Blue Line)", id:8.0, od:11.0, len_std:85, angle:"~90°", feats:["cuffed","adjustable"] },
+  // TRACOE TWIST — verified from official Atos Medical technical data sheet MC3043-TcEN 202306
+  { mfr:"Tracoe", name:"Twist Cuffed", id:6.0, od:9.2, len_std:72, angle:"95°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Tracoe", name:"Twist Cuffed", id:7.0, od:10.4, len_std:74, angle:"95°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Tracoe", name:"Twist Cuffed", id:8.0, od:11.4, len_std:76, angle:"90°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Tracoe", name:"Twist Cuffed", id:9.0, od:12.5, len_std:78, angle:"90°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Tracoe", name:"Twist Cuffed", id:10.0, od:13.8, len_std:80, angle:"90°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Tracoe", name:"Twist Uncuffed", id:6.0, od:9.2, len_std:72, angle:"95°", feats:["uncuffed","inner_cannula"] },
+  { mfr:"Tracoe", name:"Twist Uncuffed", id:7.0, od:10.4, len_std:74, angle:"95°", feats:["uncuffed","inner_cannula"] },
+  { mfr:"Tracoe", name:"Twist Uncuffed", id:8.0, od:11.4, len_std:76, angle:"90°", feats:["uncuffed","inner_cannula"] },
+  // TRACOE TWIST PLUS — verified from Atos Medical product datasheet REF 312, April 2023
+  { mfr:"Tracoe", name:"Twist Plus Fenestrated", id:7.0, od:9.8, len_std:85, angle:"100°", feats:["cuffed","inner_cannula","fenestrated"] },
+  { mfr:"Tracoe", name:"Twist Plus Fenestrated", id:8.0, od:10.8, len_std:88, angle:"100°", feats:["cuffed","inner_cannula","fenestrated"] },
+  { mfr:"Tracoe", name:"Twist Plus Fenestrated", id:9.0, od:11.8, len_std:90, angle:"100°", feats:["cuffed","inner_cannula","fenestrated"] },
+  { mfr:"Tracoe", name:"Twist Plus Fenestrated", id:10.0, od:12.8, len_std:92, angle:"100°", feats:["cuffed","inner_cannula","fenestrated"] },
+  // SHILEY FLEXIBLE — verified tracheostomyteam.org + individual product specs
+  { mfr:"Shiley", name:"Flexible Cuffed (CN)", id:6.5, od:9.4, len_std:62, angle:"~87°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Shiley", name:"Flexible Cuffed (CN)", id:7.0, od:10.1, len_std:68, angle:"~87°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Shiley", name:"Flexible Cuffed (CN)", id:7.5, od:10.8, len_std:74, angle:"~87°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Shiley", name:"Flexible Cuffed (CN)", id:8.0, od:11.4, len_std:77, angle:"~87°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Shiley", name:"Flexible Cuffed (CN)", id:8.5, od:12.2, len_std:79, angle:"~87°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Shiley", name:"Flexible Cuffed (CN)", id:9.0, od:12.7, len_std:79, angle:"~87°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Shiley", name:"Flexible Cuffed (CN)", id:10.0, od:13.8, len_std:79, angle:"~87°", feats:["cuffed","inner_cannula"] },
+  { mfr:"Shiley", name:"Flexible Uncuffed (UN)", id:7.5, od:10.8, len_std:74, angle:"~87°", feats:["uncuffed","inner_cannula"] },
+  { mfr:"Shiley", name:"Flexible Uncuffed (UN)", id:8.0, od:11.4, len_std:77, angle:"~87°", feats:["uncuffed","inner_cannula"] },
+  { mfr:"Shiley", name:"Flexible Uncuffed (UN)", id:8.5, od:12.2, len_std:79, angle:"~87°", feats:["uncuffed","inner_cannula"] },
+  // BIVONA — verify against ICU Medical IFU before clinical use
+  { mfr:"Bivona", name:"TTS Cuffed (Silicone)", id:6.0, od:8.8, len_std:70, angle:"~90°", feats:["cuffed","inner_cannula","silicone"] },
+  { mfr:"Bivona", name:"TTS Cuffed (Silicone)", id:7.0, od:10.0, len_std:80, angle:"~90°", feats:["cuffed","inner_cannula","silicone"] },
+  { mfr:"Bivona", name:"TTS Cuffed (Silicone)", id:8.0, od:11.0, len_std:88, angle:"~90°", feats:["cuffed","inner_cannula","silicone"] },
+  { mfr:"Bivona", name:"TTS Cuffed (Silicone)", id:9.0, od:12.3, len_std:98, angle:"~90°", feats:["cuffed","inner_cannula","silicone"] },
+  { mfr:"Bivona", name:"Aire-Cuf (Silicone)", id:7.0, od:10.0, len_std:80, angle:"~90°", feats:["cuffed","inner_cannula","silicone"] },
+  { mfr:"Bivona", name:"Aire-Cuf (Silicone)", id:8.0, od:11.0, len_std:88, angle:"~90°", feats:["cuffed","inner_cannula","silicone"] },
+  { mfr:"Bivona", name:"HyperFlex Adj. Flange (Silicone)", id:7.0, od:10.6, len_std:120, angle:"~90°", feats:["cuffed","inner_cannula","silicone","adjustable"] },
+  { mfr:"Bivona", name:"HyperFlex Adj. Flange (Silicone)", id:8.0, od:11.7, len_std:130, angle:"~90°", feats:["cuffed","inner_cannula","silicone","adjustable"] },
+];
+
+const RFEAT_LABELS = { cuffed:"Cuffed", uncuffed:"Uncuffed", fenestrated:"Fen", subglottic:"SSH", inner_cannula:"IC", adjustable:"Adj flange", silicone:"Silicone" };
+const RFEAT_CLS   = { cuffed:"f-cuffed", uncuffed:"f-uncuffed", fenestrated:"f-fen", subglottic:"f-sub", inner_cannula:"f-ic", adjustable:"f-adj", silicone:"f-sil" };
+const RGOAL_LABELS = {
+  smaller_od:"Smaller outer diameter", larger_id:"Larger airway lumen",
+  same_od_diff_brand:"Same dimensions, different brand", add_ssh:"Add subglottic suction",
+  add_fen:"Add fenestration", add_adj:"Add adjustable flange", silicone:"Switch to silicone",
+  downsize:"Downsize (weaning)", uncuff:"Transition to uncuffed", shorter:"Shorter tube"
+};
+
+let rFinderGoal = null;
+
+function rUpdateTubeSelect() {
+  const mfr = document.getElementById("r-mfr").value;
+  const sel = document.getElementById("r-tube");
+  sel.innerHTML = `<option value="">-- Select tube --</option>`;
+  if (!mfr) return;
+  const seen = new Set();
+  RTUBES.filter(t => t.mfr === mfr).forEach(t => {
+    const key = `${t.name}||${t.id}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      const opt = document.createElement("option");
+      opt.value = key;
+      opt.textContent = `${t.name} — ID ${t.id.toFixed(1)} mm`;
+      sel.appendChild(opt);
+    }
+  });
+  document.getElementById("r-dims-box").style.display = "none";
+  rCheckReady();
+}
+
+function rUpdateDims() {
+  const val = document.getElementById("r-tube").value;
+  if (!val) { document.getElementById("r-dims-box").style.display="none"; rCheckReady(); return; }
+  const [name, idStr] = val.split("||");
+  const tube = RTUBES.find(t => t.name === name && t.id === parseFloat(idStr));
+  if (!tube) return;
+  document.getElementById("r-dims-content").innerHTML = `
+    <span class="cts-dim">ID: <strong>${tube.id.toFixed(1)} mm</strong></span>
+    <span class="cts-dim">OD: <strong>${tube.od.toFixed(1)} mm</strong></span>
+    <span class="cts-dim">Length: <strong>${tube.len_std} mm</strong></span>
+    <span class="cts-dim">Angle: <strong>${tube.angle}</strong></span>
+    <span class="cts-dim">Features: <strong>${tube.feats.map(f=>RFEAT_LABELS[f]||f).join(", ")}</strong></span>
+  `;
+  document.getElementById("r-dims-box").style.display = "block";
+  rCheckReady();
+}
+
+function rSelGoal(btn) {
+  document.querySelectorAll("#r-goals .goal-btn").forEach(b => b.classList.remove("sel"));
+  btn.classList.add("sel");
+  rFinderGoal = btn.dataset.goal;
+  rCheckReady();
+}
+
+function rCheckReady() {
+  const tube = document.getElementById("r-tube").value;
+  document.getElementById("r-btn-find").disabled = !(tube && rFinderGoal);
+}
+
+function rGetCurrent() {
+  const val = document.getElementById("r-tube").value;
+  if (!val) return null;
+  const [name, idStr] = val.split("||");
+  return RTUBES.find(t => t.name === name && t.id === parseFloat(idStr)) || null;
+}
+
+function rRunFinder() {
+  const cur = rGetCurrent();
+  if (!cur || !rFinderGoal) return;
+  const results = rScoreTubes(cur, rFinderGoal);
+  rRenderResults(cur, results, rFinderGoal);
+  document.getElementById("r-finder-results").scrollIntoView({ behavior:"smooth", block:"start" });
+}
+
+function rScoreTubes(cur, goal) {
+  const LEN_TOL = 8;
+  return RTUBES
+    .filter(t => !(t.mfr === cur.mfr && t.name === cur.name && t.id === cur.id))
+    .map(t => {
+      let score = 0, matchTier = "possible", note = "";
+      const odDiff = parseFloat((t.od - cur.od).toFixed(2));
+      const idDiff = parseFloat((t.id - cur.id).toFixed(2));
+      const lenDiff = t.len_std - cur.len_std;
+      const lenSimilar = Math.abs(lenDiff) <= LEN_TOL;
+
+      switch (goal) {
+        case "smaller_od":
+          if (t.od >= cur.od) return null;
+          if (lenSimilar && t.id >= cur.id) { score=100; matchTier="best"; note="Smaller OD with equal or larger lumen and similar length."; }
+          else if (lenSimilar) { score=80; matchTier="good"; note="Smaller OD and similar length, slightly smaller lumen."; }
+          else if (t.id >= cur.id) { score=70; matchTier="good"; note="Smaller OD and equal lumen, different length — verify fit."; }
+          else { score=50; note="Smaller OD but verify length and lumen suitability."; }
+          break;
+        case "larger_id":
+          if (t.id <= cur.id) return null;
+          if (lenSimilar && t.od <= cur.od + 2) { score=100; matchTier="best"; note="Larger lumen, similar length, modest OD increase."; }
+          else if (lenSimilar) { score=75; matchTier="good"; note="Larger lumen, similar length — verify tracheal OD fit."; }
+          else { score=55; note="Larger lumen — verify length for this patient's anatomy."; }
+          break;
+        case "same_od_diff_brand":
+          if (t.mfr === cur.mfr) return null;
+          const odClose = Math.abs(odDiff) <= 0.8;
+          const idMatch = t.id === cur.id;
+          const lenClose = Math.abs(lenDiff) <= 5;
+          if (odClose && lenClose && idMatch) { score=100; matchTier="best"; note="Near-identical OD, ID, and length — direct cross-brand equivalent."; }
+          else if (odClose && idMatch) { score=80; matchTier="good"; note="Same ID and similar OD — length differs slightly."; }
+          else if (idMatch && lenClose) { score=65; matchTier="good"; note="Same ID and length — OD varies; check tracheal fit."; }
+          else if (idMatch) { score=50; note="Same inner diameter — OD and/or length differ between brands."; }
+          else return null;
+          break;
+        case "add_ssh":
+          if (!t.feats.includes("subglottic") || t.id !== cur.id) return null;
+          score = lenSimilar ? 100 : 75; matchTier = lenSimilar ? "best" : "good";
+          note = "Same ID with subglottic suction port.";
+          break;
+        case "add_fen":
+          if (!t.feats.includes("fenestrated") || t.id !== cur.id) return null;
+          score = lenSimilar ? 100 : 75; matchTier = lenSimilar ? "best" : "good";
+          note = "Same ID, fenestrated. Note: Royal Brompton practice generally avoids fenestrated tubes due to tracheal granulation tissue risk — consider speaking valve on non-fenestrated tube first. Discuss with senior clinician.";
+          break;
+        case "add_adj":
+          if (!t.feats.includes("adjustable") || t.id !== cur.id) return null;
+          score = 100; matchTier = "best"; note = "Same ID with adjustable flange.";
+          break;
+        case "silicone":
+          if (!t.feats.includes("silicone") || t.id !== cur.id) return null;
+          score = lenSimilar ? 100 : 75; matchTier = lenSimilar ? "best" : "good";
+          note = "Same ID, silicone material. Note: no inner cannula — more frequent changes needed.";
+          break;
+        case "downsize":
+          const tId = parseFloat((cur.id - 1.0).toFixed(1));
+          if (Math.abs(t.id - tId) > 0.1) return null;
+          const cuffMatch = cur.feats.includes("cuffed") ? t.feats.includes("cuffed") : true;
+          if (cuffMatch && lenSimilar) { score=100; matchTier="best"; note="One ISO size smaller, similar length. Allow 24–48h adaptation."; }
+          else if (cuffMatch) { score=80; matchTier="good"; note="One ISO size smaller — length differs between brands."; }
+          else { score=60; note="One ISO size smaller — cuff type differs; check appropriateness."; }
+          break;
+        case "uncuff":
+          if (!t.feats.includes("uncuffed") || t.id !== cur.id) return null;
+          score = lenSimilar ? 100 : 75; matchTier = lenSimilar ? "best" : "good";
+          note = "Same ID, uncuffed. Ensure cuff deflation trial tolerated first.";
+          break;
+        case "shorter":
+          if (t.len_std >= cur.len_std || t.id !== cur.id) return null;
+          score = 100 - Math.abs(odDiff)*5; matchTier = lenDiff < -10 ? "best" : "good";
+          note = `${Math.abs(lenDiff)} mm shorter — same inner diameter.`;
+          break;
+        default: return null;
+      }
+      if (score <= 0) return null;
+      return { tube:t, score, matchTier, note, odDiff, idDiff, lenDiff };
+    })
+    .filter(Boolean)
+    .sort((a,b) => b.score - a.score)
+    .slice(0, 8);
+}
+
+function rRenderResults(cur, results, goal) {
+  const out = document.getElementById("r-finder-results");
+  if (!results.length) {
+    out.innerHTML = `<div class="no-alts">No alternatives found for this combination. Try a different goal or tube size.</div>`;
+    return;
+  }
+  let html = `<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;">${results.length} alternative${results.length!==1?"s":""} found for: ${RGOAL_LABELS[goal]||goal}</div>`;
+  results.forEach(r => {
+    const t = r.tube;
+    const tierCls = r.matchTier==="best"?"best":"good";
+    const badgeCls = r.matchTier==="best"?"mb-best":r.matchTier==="good"?"mb-good":"mb-possible";
+    const badgeLbl = r.matchTier==="best"?"★ Best match":r.matchTier==="good"?"✓ Good match":"Possible";
+    const odCls = r.odDiff < -0.1 ? "dim-better" : r.odDiff > 0.1 ? "dim-worse" : "dim-same";
+    const idCls = r.idDiff > 0.05 ? "dim-better" : r.idDiff < -0.05 ? "dim-worse" : "dim-same";
+    const odD = r.odDiff === 0 ? "same" : (r.odDiff>0?"+":"")+r.odDiff.toFixed(1)+" mm";
+    const idD = r.idDiff === 0 ? "same" : (r.idDiff>0?"+":"")+r.idDiff.toFixed(1)+" mm";
+    const lenD = r.lenDiff === 0 ? "same" : (r.lenDiff>0?"+":"")+r.lenDiff+" mm";
+    html += `<div class="alt-card ${tierCls}">
+      <span class="match-badge ${badgeCls}">${badgeLbl}</span>
+      <div class="alt-name">${t.mfr} — ${t.name}</div>
+      <div class="alt-series">${t.feats.map(f=>`<span class="feat-chip ${RFEAT_CLS[f]||''}">${RFEAT_LABELS[f]||f}</span>`).join("")}</div>
+      <div class="dim-compare">
+        <div class="dim-cell ${idCls}"><div class="dim-label">Inner diam (ID)</div><div class="dim-val">${t.id.toFixed(1)} mm</div><div class="dim-delta ${r.idDiff>0?"pos":r.idDiff<0?"neg":""}">${idD}</div></div>
+        <div class="dim-cell ${odCls}"><div class="dim-label">Outer diam (OD)</div><div class="dim-val">${t.od.toFixed(1)} mm</div><div class="dim-delta ${r.odDiff<0?"pos":r.odDiff>0?"neg":""}">${odD}</div></div>
+        <div class="dim-cell dim-same"><div class="dim-label">Length (TL)</div><div class="dim-val">${t.len_std} mm</div><div class="dim-delta">${lenD}</div></div>
+        <div class="dim-cell dim-same"><div class="dim-label">Bend angle</div><div class="dim-val">${t.angle}</div><div class="dim-delta">${t.angle===cur.angle?"same":"differs"}</div></div>
+      </div>
+      <div class="alt-note">${r.note}</div>
+    </div>`;
+  });
+  out.innerHTML = html;
+}
+</script>
+</body>
+</html>
